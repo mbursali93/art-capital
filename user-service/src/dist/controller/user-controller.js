@@ -48,7 +48,7 @@ class UserController {
             try {
                 const user = yield service.login(req.body);
                 const accessToken = yield utils.generateAccessToken(user.id, user.role);
-                const refreshToken = yield utils.generateAccessToken(user.id, user.role);
+                const refreshToken = yield utils.generateRefreshToken(user.id, user.role);
                 res.cookie("refreshToken", refreshToken, { httpOnly: true, path: "/", maxAge: 1000 * 3600 * 7 * 24 });
                 const { password } = user, others = __rest(user, ["password"]);
                 res.status(200).json(Object.assign(Object.assign({}, others), { accessToken }));
@@ -62,7 +62,7 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 res.clearCookie("refreshToken", { path: "/" });
-                res.status(200).json("logged out");
+                res.status(203).json("logged out");
             }
             catch (e) {
                 res.status(500).json(e.message);
@@ -74,7 +74,7 @@ class UserController {
             try {
                 const refreshToken = req.cookies.refreshToken;
                 const accessToken = yield utils.getNewToken(refreshToken);
-                res.status(200).json(accessToken);
+                res.status(200).json({ token: accessToken });
             }
             catch (e) {
                 res.status(500).json(e.message);

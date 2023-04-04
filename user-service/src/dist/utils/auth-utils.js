@@ -28,12 +28,17 @@ class AuthUtils {
     }
     generateAccessToken(id, role) {
         return __awaiter(this, void 0, void 0, function* () {
-            const secret = process.env.JWT_ACCESS;
-            if (!secret) {
-                throw new Error("There is no accessToken secret");
+            try {
+                const secret = process.env.JWT_ACCESS;
+                if (!secret) {
+                    throw new Error("There is no accessToken secret");
+                }
+                const token = yield jsonwebtoken_1.default.sign({ id, role }, secret, { expiresIn: "11m" });
+                return token;
             }
-            const token = yield jsonwebtoken_1.default.sign({ id, role }, secret, { expiresIn: "11m" });
-            return token;
+            catch (err) {
+                throw new Error("Access token generate process failed");
+            }
         });
     }
     generateRefreshToken(id, role) {
@@ -59,17 +64,14 @@ class AuthUtils {
                 throw new Error("There is no refreshToken secret");
             }
             try {
-                const user = yield jsonwebtoken_1.default.verify(refreshToken, secret);
-                ;
-                if (!user) {
-                    throw new Error();
-                }
-                const accessToken = yield this.generateAccessToken(user.id, user.role);
-                return accessToken;
+                const user = jsonwebtoken_1.default.verify(refreshToken, secret);
+                const token = this.generateAccessToken(user.id, user.role);
+                return token;
             }
             catch (err) {
-                throw new Error("Invalid refresh token");
+                throw new Error(err.message);
             }
+            throw new Error("Unable to generate new token");
         });
     }
 }

@@ -10,5 +10,5 @@ const controller = new user_controller_1.default();
 router.post("/register", controller.register);
 router.post("/login", controller.login);
 router.post("/logout", controller.logout);
-router.get("/refresh", controller.refreshToken);
+router.post("/refresh", controller.refreshToken);
 exports.default = router;

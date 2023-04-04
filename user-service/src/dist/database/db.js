@@ -17,18 +17,11 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 class Database {
     constructor() {
-        // this.pool = new Pool({
-        //     host: "postgres",
-        //     user: process.env.POSTGRES_USER,
-        //     password: process.env.POSTGRES_PASSWORD,
-        //     database: process.env.POSTGRES_DB,
-        //     port: 5431
-        // });
         this.pool = new pg_1.Pool({
             host: "localhost",
-            user: "postgres",
-            password: "rachel123",
-            database: "artcapital",
+            user: process.env.POSTGRES_USER,
+            password: process.env.POSTGRES_PASSWORD,
+            database: process.env.POSTGRES_DB,
             port: 5432
         });
     }
@@ -50,7 +43,8 @@ class Database {
                 process.exit(1);
             }
             finally {
-                //if(client) client.release()
+                if (client)
+                    client.release();
             }
         });
     }

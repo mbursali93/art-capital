@@ -33,7 +33,7 @@ class UserController {
             
             const user = await service.login(req.body)
             const accessToken = await utils.generateAccessToken(user.id, user.role)
-            const refreshToken = await utils.generateAccessToken(user.id, user.role)
+            const refreshToken = await utils.generateRefreshToken(user.id, user.role)
 
             res.cookie("refreshToken", refreshToken, { httpOnly: true, path: "/", maxAge: 1000 * 3600 * 7 * 24 })
 
@@ -48,7 +48,7 @@ class UserController {
     async logout (req: Request, res: Response) {
         try {
             res.clearCookie("refreshToken", { path:"/" })
-            res.status(200).json("logged out")
+            res.status(203).json("logged out")
         } catch(e:any) {
 
             res.status(500).json(e.message)
@@ -60,8 +60,9 @@ class UserController {
 
             const refreshToken = req.cookies.refreshToken
             const accessToken = await utils.getNewToken(refreshToken)
+            
 
-            res.status(200).json(accessToken)
+            res.status(200).json({token: accessToken})
         } catch(e:any) {
             res.status(500).json(e.message)
         }

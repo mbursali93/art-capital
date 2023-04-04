@@ -3,20 +3,25 @@ import fs from "fs"
 import path from "path"
 
 
+
 class Database {
     pool: Pool
     constructor() {
 
         this.pool = new Pool({
-            host: "postgres",
+            host: "localhost",
             user: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DB,
-            port: 5431
+            port: 5432
         
         });
-  
     }
+
+        
+
+  
+    
     
     private createTable():void {
         
@@ -36,7 +41,7 @@ class Database {
             console.log(e.message)
             process.exit(1)
         } finally {
-            //if(client) client.release()
+            if(client) client.release()
         }
         
     }

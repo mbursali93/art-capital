@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs"
 import crypto from "crypto"
-import jwt from "jsonwebtoken"
+import jwt, { JwtPayload } from "jsonwebtoken"
 
 
 class AuthUtils {
@@ -16,8 +16,9 @@ idGenerator():string {
     return id
 }
 
-async generateAccessToken(id:string, role: string | undefined):Promise<string> {
-    const secret = process.env.JWT_ACCESS
+async generateAccessToken(id:string | undefined, role: string | undefined):Promise<string> {
+    try {
+      const secret = process.env.JWT_ACCESS
 
     if (!secret) {
         throw new Error("There is no accessToken secret")
@@ -25,9 +26,12 @@ async generateAccessToken(id:string, role: string | undefined):Promise<string> {
 
      const token = await jwt.sign({ id, role }, secret, { expiresIn: "11m" })
      return token;
+    } catch(err) {
+      throw new Error("Access token generate process failed")
+    }
 }
 
-async generateRefreshToken(id:string, role: string | undefined):Promise<string> {
+async generateRefreshToken(id:string | undefined, role: string | undefined):Promise<string> {
     const secret = process.env.JWT_REFRESH
 
     if (!secret) {
@@ -43,23 +47,24 @@ async comparePasswords(inputPassword:string, databasePassword:string):Promise<bo
     return result;
 }
 
-async getNewToken(refreshToken:string): Promise<any> {
-    const secret = process.env.JWT_REFRESH;
+async getNewToken(refreshToken: string): Promise<string> {
+  const secret = process.env.JWT_REFRESH
 
-    if (!secret) {
-      throw new Error("There is no refreshToken secret");
-    }
-  
-    try {
-      const user = await jwt.verify(refreshToken, secret) as { id: string, role: string | undefined }; ;
-      if (!user) {
-        throw new Error();
-      }
-      const accessToken = await this.generateAccessToken(user.id, user.role);
-      return accessToken;
-    } catch (err) {
-      throw new Error("Invalid refresh token");
-    }
+  if (!secret) {
+    throw new Error("There is no refreshToken secret");
+  }
+
+  try {
+    const user = jwt.verify(refreshToken, secret) as JwtPayload
+    const token = this.generateAccessToken(user.id, user.role)
+    return token;    
+
+    
+  } catch (err:any) {
+    throw new Error(err.message);
+  }
+
+  throw new Error("Unable to generate new token");
 }
 
 }

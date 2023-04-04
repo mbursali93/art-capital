@@ -8,5 +8,11 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "chai-http": "^4.3.0"
+  },
+  "dependencies": {
+    "@types/chai-http": "^4.2.0"
+  }
 }
