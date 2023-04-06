@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha --exit --timeout 10000 --require ts-node/register \"src/tests/**/*.ts\"",
     "nodemon": "nodemon  -L --watch 'src/**/*.ts' --ext 'ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/server.ts",
-    "devStart": "nodemon src/dist/server.js"
+    "dev": "nodemon"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +27,7 @@
     "@types/jsonwebtoken": "^9.0.1",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.15.11",
+    "@types/nodemon": "^1.19.2",
     "@types/pg": "^8.6.6",
     "@types/supertest": "^2.0.12",
     "chai": "^4.3.7",
