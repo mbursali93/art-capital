@@ -11,7 +11,7 @@ export const verifySeller = async (req: Request, res: Response, next: NextFuncti
         if(user.role !== "seller" || user.id !== req.params.seller_id ) return res.status(403).json("you are not allowed to do that")
         next()
     } catch {
-        res.status(500).json("Something went wrong on seller verification")
+        res.status(403).json("Something went wrong on seller verification")
     }
 
 }

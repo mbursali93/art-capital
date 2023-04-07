@@ -34,11 +34,11 @@ export default class ProductService {
 
         //Sorting
         switch(priceOption) {
-            case "ascending": {
+            case "descending": {
                 priceOption = { price: -1 }
                 break;
             }
-            case "descending": {
+            case "ascending": {
                 priceOption = { price: 1 }
                 break;
             }

@@ -20,10 +20,10 @@ class ProductController {
 
     async getProducts(req: Request, res: Response) {
         try {
-            let { search, filter, minPrice, maxPrice, priceSort } = req.query
+            let { search, filter, minPrice, maxPrice, priceOption } = req.query
             
 
-             const products =  await service.getAllProducts({ search, filter, minPrice, maxPrice, priceSort })
+             const products =  await service.getAllProducts({ search, filter, minPrice, maxPrice, priceOption })
             res.status(200).json(products)
         } catch(e:any) {
             res.status(500).json(e.message)

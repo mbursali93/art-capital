@@ -25,7 +25,8 @@ class ProductRepository {
     ])
     .where({ art_type: { $in: filter } })
     .where({ price: { $gte: 1000, $lte:2000} })
-    .sort( undefined)
+    .sort(priceSort)
+
     
     return products;
 
