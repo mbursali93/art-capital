@@ -30,7 +30,7 @@ const PORT = process.env.USER_SERVICE_PORT || 7001
 
 
 
-app.listen(0, ()=> console.log(`User service is running on PORT: ${PORT}`))
+app.listen(PORT, ()=> console.log(`user-service is running on PORT: ${PORT}`))
 
 
 export default app;

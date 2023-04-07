@@ -71,24 +71,7 @@ class ProductTests {
 
     }
 
-    updateProduct() {
-        describe("GET /products", ()=> {
-            it("should get products ", (done)=> {
-                chai.request(server).post("/products").send().set("Authorization", "test").end((err, res)=> {
-                    res.should.have.status(200)
-                    res.body.should.have.property("title")
-                    res.body.should.have.property("description")
-                    res.body.should.have.property("art_type")
-                    res.body.should.have.property("artist")
-                    res.body.should.have.property("price")
-                    res.body.should.have.property("image_url")
-                    res.body.should.have.property("artist_id")
-                    
-                    done()
-                })
-            })
-        })
-    }
+    
 
     
 }

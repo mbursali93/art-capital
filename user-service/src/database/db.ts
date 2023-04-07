@@ -36,7 +36,7 @@ class Database {
         try {
            client = await this.pool.connect()
             this.createTable()
-            console.log("Database connection is successful")
+            console.log("database connection is successful")
         } catch(e:any) {
             console.log(e.message)
             process.exit(1)
