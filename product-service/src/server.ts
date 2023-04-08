@@ -20,6 +20,6 @@ mongoose.connect(process.env.MONGO_URL ? process.env.MONGO_URL : "")
 
 
 const PORT = process.env.PRODUCT_PORT || 7002
-app.listen(0, ()=> console.log(`product-service is running on PORT: ${PORT}`))
+app.listen(PORT, ()=> console.log(`product-service is running on PORT: ${PORT}`))
 
 export default app;
