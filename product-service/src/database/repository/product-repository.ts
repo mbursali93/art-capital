@@ -24,7 +24,7 @@ class ProductRepository {
         { artist_name: { $regex: search, $options: "i" } },
     ])
     .where({ art_type: { $in: filter } })
-    .where({ price: { $gte: 1000, $lte:2000} })
+    .where({ price: { $gte: minPrice, $lte:maxPrice } })
     .sort(priceSort)
 
     
