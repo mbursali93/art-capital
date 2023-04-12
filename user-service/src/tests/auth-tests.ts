@@ -23,6 +23,7 @@ class AuthTests {
                     res.body.should.not.have.property("password")
                     res.body.should.have.property("accessToken")
                     res.body.should.have.property("role")
+                    res.body.should.not.have.property("iban")
                     res.should.have.cookie("refreshToken")
 
                     done()

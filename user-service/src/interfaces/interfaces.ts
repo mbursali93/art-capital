@@ -5,7 +5,8 @@ interface IUserInputs {
     password: string,
     avatar?: string,
     role?:string,
-    social_media_links?: string[]
+    social_media_links?: string[],
+    iban: string
 }
 
 export default IUserInputs

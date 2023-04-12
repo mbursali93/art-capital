@@ -7,7 +7,8 @@ const ProductSchema = new Schema({
     image_url: { type:String, required:true },
     art_type: { type:String, required:true },
     artist_name: { type:String, required:true },
-    artist_id: { type:String, required:true }
+    artist_id: { type:String, required:true },
+    status: { type:String, default: "on sale" },
 
 }, { timestamps:true }
 

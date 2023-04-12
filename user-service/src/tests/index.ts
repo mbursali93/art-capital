@@ -1,8 +1,9 @@
 import AuthTests from "./auth-tests";
+import UserTests from "./user-tests";
 
-const test = new AuthTests()
+const auth = new AuthTests()
+const user = new UserTests()
 
-// test.login()
-// test.logout()
 
-test.runAllTests()
+auth.runAllTests()
+user.runAllTests()

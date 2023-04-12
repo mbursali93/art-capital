@@ -11,8 +11,6 @@ class UserController {
     async register(req: Request, res: Response) {
         try {
 
-            const { username, email, password, social_media_links } = req.body;
-
             const user = await service.register(req.body);
             const accessToken = await utils.generateAccessToken(user.id, user.role)
             const refreshToken = await utils.generateRefreshToken(user.id, user.role)
@@ -68,7 +66,14 @@ class UserController {
         }
     }
 
+    async getUserById (req: Request, res: Response) {
+        try {
 
+            res.status(200).json()
+        } catch(e:any) {
+            res.status(500).json(e.message)
+        }
+    }
 
 }
 

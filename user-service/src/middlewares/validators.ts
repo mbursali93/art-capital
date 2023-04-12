@@ -15,7 +15,7 @@ const userValidation = [
     .matches(/[0-9]/).withMessage("password must contain at least one number")
     .matches(/[a-z]/).withMessage("password must contain at least one lowercase letter"),
 
-    body("social_media_links").isObject(),
+    body("iban").isIBAN().withMessage("please enter a valid IBAN"),
     
     (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req)

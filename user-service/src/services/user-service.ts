@@ -13,10 +13,10 @@ class UserService {
     }
     
     async register(userInputs: IUserInputs):Promise<IUserInputs> {
-        const { username, email, password, avatar, social_media_links } = userInputs
+        const { username, email, password, avatar, social_media_links, iban } = userInputs
         const id = this.utils.idGenerator()
         const hashedPassword = await this.utils.generateHashedPassword(password)
-        const user = await this.repository.register({ id, username, email, password: hashedPassword, avatar, social_media_links }) 
+        const user = await this.repository.register({ id, username, email, password: hashedPassword, avatar, social_media_links, iban }) 
         
         return user;
   
@@ -31,6 +31,10 @@ class UserService {
 
         return user;
 
+    }
+
+    async getUser(id: string) {
+        
     }
 }
 
