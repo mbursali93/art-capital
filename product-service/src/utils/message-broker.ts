@@ -1,40 +1,56 @@
 import amqp, { Connection, Channel } from "amqplib"
 
+
+
 class MessageQueue {
-    private connection: Connection 
-    private channel: Channel
+    private sendConnection: Connection 
+    private getConnection: Connection
+    private sendChannel: Channel;
+    private getChannel: Channel;
     private q: amqp.Replies.AssertQueue;
 
-    constructor() {
-        this.connection = null!;
-        this.channel = null!;
-        this.q = null!;
-      }
+  constructor() {
+    this.sendConnection = null!;
+    this.getConnection = null!;
+    this.sendChannel = null!;
+    this.q = null!;
+    this.getChannel = null!;
+  }
 
+  async createSendChannel(): Promise<void> {
+    this.sendConnection = await amqp.connect(process.env.AMQP_URL || "");
+    this.sendChannel = await this.sendConnection.createChannel();
+    await this.sendChannel.assertExchange("product-to-payment" || "", "direct", { durable: true });
+  }
 
-    async createChannel(): Promise<void> {
-        this.connection = await amqp.connect(process.env.AMQP_URL || "")
-        this.channel = await this.connection.createChannel()
-        await this.channel.assertExchange(process.env.EXCHANGE_NAME || "", "direct", { durable:true })
-    }
+  async createGetChannel(): Promise<void> {
+    this.getConnection = await amqp.connect(process.env.AMQP_URL || "");
+    this.getChannel = await this.getConnection.createChannel();
+    await this.getChannel.assertExchange("payment-to-product" || "", "direct", { durable: true });
 
+    
+  }
 
-    async publishMessage(message: { buyer_id: string, seller_id: string, product_id: string }, routeKey:string): Promise<void> {
-        if(!this.channel) await this.createChannel()
-        await this.channel.publish(process.env.EXCHANGE_NAME || "", routeKey, Buffer.from(JSON.stringify(message)))
-    }
+  private async subscribeMessages(routeKey: string): Promise<void> {
+    if (!this.getChannel) await this.createGetChannel();
+    this.q = await this.getChannel.assertQueue("payment-to-product");
+    await this.getChannel.bindQueue(this.q.queue, "payment-to-product", routeKey);
+  }
 
-    private async subscribeMessages(routeKey:string): Promise<void> {
-        if(!this.channel) await this.createChannel()
-        this.q = await this.channel.assertQueue(process.env.EXCHANGE_NAME || "")
-        await this.channel.bindQueue(this.q.queue, process.env.EXCHANGE_NAME || "", routeKey)
-        
-    }
-
-    async handleMessage() {
-        await this.subscribeMessages("test")
-        await this.channel.consume(this.q.queue, async (msg)=> {
-
+    async handlePaymentRequests(): Promise<void> {
+        if(!this.sendChannel) await this.createSendChannel()
+        await this.subscribeMessages("payment_request")
+        await this.getChannel.consume(this.q.queue, async (msg)=> {
+            if(msg) {
+                const message = JSON.parse(msg?.content.toString())
+                console.log(message)
+                
+                
+                await this.sendChannel.sendToQueue("product-to-payment" || "", Buffer.from(JSON.stringify({ msah: "fsdx" })), { correlationId: "id"})
+                this.getChannel.ack(msg!)
+            } 
+            
+            
         })
     }
 

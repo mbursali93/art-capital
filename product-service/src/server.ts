@@ -4,12 +4,14 @@ import mongoose from "mongoose"
 dotenv.config()
 
 import productRoutes from "./routes/product-routes"
+import MessageQueue from "./utils/message-broker"
 
 
 const app = express()
+const message = new MessageQueue()
 
 app.use(express.json())
-
+message.handlePaymentRequests()
 
 app.use("/products", productRoutes)
 

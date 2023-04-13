@@ -17,7 +17,11 @@ class PaymentController {
             const { buyer_id, buyer_email, seller_id, seller_email, product_id, address } = req.body;
 
             
-            await message.publishMessage({ buyer_id, seller_id, product_id }, "payment_request")
+            await message.publishMessage({ buyer_id, seller_id, product_id }, "payment_request", "payment-to-user")
+            await message.handleIncomingMessages("payment_request", "user-to-payment")
+            await message.publishMessage({ buyer_id, seller_id, product_id }, "payment_request", "payment-to-product")
+            await message.handleIncomingMessages("payment_request", "product-to-payment")
+
            
             res.status(200).send('Charge successful!');
             
