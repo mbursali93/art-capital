@@ -5,11 +5,9 @@ import dotenv from "dotenv"
 dotenv.config()
 
 import paymentRouter from "./routes/payment-routes"
-import MessageQueue from "./utils/message-broker"
 
 
 const app = express()
-const message = new MessageQueue()
 
 app.use(express.json())
 app.use(cors({

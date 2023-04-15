@@ -39,6 +39,13 @@ class ProductRepository {
     async deleteProductById(id:string) {
         await Product.findByIdAndDelete(id)
     }
+
+
+    async updateProductStatus(id:string) {
+        await Product.findOneAndUpdate({ _id: id }, {
+            status: "pending"
+        })
+    }
 }
 
 export default ProductRepository

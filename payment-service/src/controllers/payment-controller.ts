@@ -1,29 +1,40 @@
 import { Request, Response } from "express"
 import MessageQueue from "../utils/message-broker";
+import PaymentUtils from "../utils/utils";
+import PaymentService from "../services/payment-service";
 
 
 const message = new MessageQueue()
+const service = new PaymentService()
+const utils = new PaymentUtils()
+
+
 class PaymentController {
 
-    // get payment
-    // send message to other servers
-    // get message
-    // handle database
-    // handle emails
 
     async makePayment(req: Request, res:Response) {
         try {
 
-            const { buyer_id, buyer_email, seller_id, seller_email, product_id, address } = req.body;
+            const { buyer_id, buyer_email, seller_email, product_id, address } = req.body;
+            const { price, title, seller_id } = await service.getProductInfos(product_id)
+  
+            await utils.payment(price)
+            await message.sendMessage("product", product_id)
 
+            const orderInformation = { 
+                buyer_id,
+                buyer_email,
+                seller_id,
+                seller_email,
+                product_id,
+                product_title: title,
+                price,
+                address
+ 
+            }
+            const order = await service.createOrder(orderInformation)
             
-            await message.publishMessage({ buyer_id, seller_id, product_id }, "payment_request", "payment-to-user")
-            await message.handleIncomingMessages("payment_request", "user-to-payment")
-            await message.publishMessage({ buyer_id, seller_id, product_id }, "payment_request", "payment-to-product")
-            await message.handleIncomingMessages("payment_request", "product-to-payment")
-
-           
-            res.status(200).send('Charge successful!');
+            res.status(201).json(order)
             
               
         } catch(e:any) {
@@ -34,7 +45,7 @@ class PaymentController {
     }
 
     async acceptPayment() {
-
+         
     }
 
     async cancelPayment() {

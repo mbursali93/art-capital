@@ -13,13 +13,13 @@ export default class ProductService {
     async getAllProducts(filterOptions: any): Promise<IProduct[]> {
         let allFilters = [ "painting", "sculpture", "photography", "printmaking", "drawing", "textile art" ]
         let { search, filter, minPrice, maxPrice, priceOption } = filterOptions
-        let priceSort;
+        
 
         // Search
         if(search == undefined) search = "";
 
         //Filter
-        if(filter?.length === 0) {
+        if(filter?.length === 0 || !filter) {
             filter = [...allFilters]
         } else {
             filter = filter.split(",")
@@ -29,8 +29,8 @@ export default class ProductService {
 
         //Prices
 
-        if(minPrice == undefined) minPrice === 0;
-        if(maxPrice === undefined) maxPrice === Number.POSITIVE_INFINITY;
+        if(minPrice === undefined || minPrice == null) minPrice = 0;
+        if(maxPrice === undefined) maxPrice = Number.POSITIVE_INFINITY;
 
         //Sorting
         switch(priceOption) {

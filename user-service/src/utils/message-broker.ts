@@ -41,12 +41,13 @@ class MessageQueue {
         await this.subscribeMessages("payment_request")
         await this.getChannel.consume(this.q.queue, async (msg)=> {
             if(msg) {
-                const message = JSON.parse(msg?.content.toString())
+                const message = await JSON.parse(msg?.content.toString())
                 const buyerIban = await repository.getUserIBAN(message.buyer_id)
                 const sellerIban = await repository.getUserIBAN(message.seller_id)
-                console.log(message)
-                 if(!this.sendChannel) await this.createSendChannel()
-                await this.sendChannel.sendToQueue("user-to-payment" || "", Buffer.from(JSON.stringify({ buyerIban, sellerIban })), { correlationId: "id"})
+                const newMessage = { buyerIban, sellerIban}
+                
+                if(!this.sendChannel) await this.createSendChannel()
+                await this.sendChannel.sendToQueue("to-payment", Buffer.from(JSON.stringify(newMessage)))
                 this.getChannel.ack(msg!)
             } 
             

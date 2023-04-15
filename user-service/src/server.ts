@@ -9,7 +9,7 @@ import Database from "./database/db"
 
 import authRouter from "./routes/auth-route"
 import userRouter from "./routes/user-route"
-
+import adminRouter from "./routes/admin-routes"
 
 
 
@@ -23,10 +23,10 @@ app.use(cookieParser(process.env.COOKIE_SECRET))
 
 app.use("/auth", authRouter)
 app.use("/users", userRouter)
+app.use("/admin", adminRouter)
 
 
 database.connect()
-message.handlePaymentRequests()
 
 
 const PORT = process.env.USER_SERVICE_PORT || 7001

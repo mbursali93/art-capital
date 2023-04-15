@@ -67,6 +67,14 @@ async getNewToken(refreshToken: string): Promise<string> {
   throw new Error("Unable to generate new token");
 }
 
+async verifyAccessToken(token: string): Promise<JwtPayload> {
+  const secret = process.env.JWT_ACCESS
+  if(!secret) throw new Error("There is no token secret")
+  const user = await jwt.verify(token, secret) as JwtPayload
+  return user;
+  
+}
+
 }
 
 export default AuthUtils

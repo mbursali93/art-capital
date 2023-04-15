@@ -7,7 +7,7 @@ const controller = new UserController()
 
 
 router.post("/register", userValidation, controller.register)
-router.post("/login", userValidation, controller.login)
+router.post("/login", controller.login)
 router.post("/logout", controller.logout)
 router.post("/refresh", controller.refreshToken)
 

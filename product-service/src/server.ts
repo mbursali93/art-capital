@@ -9,9 +9,9 @@ import MessageQueue from "./utils/message-broker"
 
 const app = express()
 const message = new MessageQueue()
+message.handlePaymentRequest("product")
 
 app.use(express.json())
-message.handlePaymentRequests()
 
 app.use("/products", productRoutes)
 
