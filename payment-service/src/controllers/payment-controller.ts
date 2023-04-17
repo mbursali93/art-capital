@@ -2,11 +2,13 @@ import { Request, Response } from "express"
 import MessageQueue from "../utils/message-broker";
 import PaymentUtils from "../utils/utils";
 import PaymentService from "../services/payment-service";
+import PaymentRepository from "../database/repository/payment-repository";
 
 
 const message = new MessageQueue()
 const service = new PaymentService()
 const utils = new PaymentUtils()
+const repository = new PaymentRepository()
 
 
 class PaymentController {
@@ -44,8 +46,15 @@ class PaymentController {
     
     }
 
-    async acceptPayment() {
-         
+    async acceptPayment(req: Request, res: Response) {
+        try {
+            const { product_id } = req.params
+            const order = await repository.updateOrderStatus(product_id, "accept")
+
+            res.status(200).json(order)
+        } catch(e:any) {
+            res.status(500).json(e.message)
+        }
     }
 
     async cancelPayment() {

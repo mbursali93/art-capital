@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import jwt from "jsonwebtoken"
+import jwt, { JwtPayload } from "jsonwebtoken"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET || "", {
     apiVersion: '2022-11-15',
@@ -29,6 +29,15 @@ class PaymentUtils {
       } catch(err) {
         throw new Error("Access token generate process failed")
       }
+  }
+
+  async verifyAccessToken(token:string) {
+    try {
+      const user = await jwt.verify(token, process.env.JWT_ACCESS || "") as JwtPayload
+      return user;
+    }catch {
+      throw new Error("Something went wrong on verification of access token")
+    }
   }
 } 
 
