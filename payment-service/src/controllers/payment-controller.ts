@@ -48,8 +48,8 @@ class PaymentController {
 
     async acceptPayment(req: Request, res: Response) {
         try {
-            const { product_id } = req.params
-            const order = await repository.updateOrderStatus(product_id, "accept")
+            const { order_id } = req.params
+            const order = await repository.updateOrderStatus(order_id, "accept")
 
             res.status(200).json(order)
         } catch(e:any) {
@@ -57,8 +57,16 @@ class PaymentController {
         }
     }
 
-    async cancelPayment() {
-        
+    async cancelPayment(req: Request, res: Response) {
+        try {
+            
+            const { order_id } = req.params
+            const order = await repository.updateOrderStatus(order_id, "canceled")
+            res.status(204).json(order)
+
+        } catch(e:any) {
+            res.status(500).json(e.message)
+        }
     }
 }
 
