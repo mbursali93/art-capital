@@ -26,10 +26,42 @@ class MessageQueue {
     if(!this.getChannel) await this.createGetChannel()
     await this.getChannel.assertQueue(queue, { durable: true })
     await this.getChannel.consume(queue, async(msg)=> {
+      console.log("message recieved from payment request")
       const productId = JSON.parse(msg!.content.toString())
-      await product.updateProductStatus(productId)
+      await product.updateProductStatus(productId, "pending")
       this.getChannel.ack(msg!)
     } )
+  }
+
+  async handleAcceptRequest(queue:string) {
+
+    if(!this.getChannel) await this.createGetChannel()
+    await this.getChannel.assertQueue(queue, { durable: true })
+    await this.getChannel.consume(queue, async(msg)=> {
+      console.log("message recieved from accept request")
+      const productId = JSON.parse(msg!.content.toString())
+      await product.deleteProductById(productId.productId)
+      this.getChannel.ack(msg!)
+
+    })
+  }
+
+  async handleCancelRequest(queue:string) {
+
+    if(!this.getChannel) await this.createGetChannel()
+    await this.getChannel.assertQueue(queue, { durable: true })
+    await this.getChannel.consume(queue, async(msg)=> {
+      console.log("message recieved from cancel request")
+      const productId = JSON.parse(msg!.content.toString())
+      await product.updateProductStatus(productId.productId, "on sale")
+      this.getChannel.ack(msg!)
+
+    })
+  }
+
+  async handleIncomingMessages(queue:string) {
+    await this.handleAcceptRequest(queue)
+    await this.handlePaymentRequest(queue)
   }
 
 

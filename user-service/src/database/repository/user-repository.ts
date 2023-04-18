@@ -3,7 +3,7 @@ import Database from "../db";
 import query from "../queries/user-query"
 
 class UserRepository {
-    db:Database
+    private db:Database
     constructor() {
         this.db = new Database()
     }
@@ -23,6 +23,10 @@ class UserRepository {
     async getUserIBAN(id:string) :Promise<string> {
         const iban = await this.db.pool.query(query.getUserIBAN, [id])
         return iban.rows[0]
+    }
+
+    async updateUserSells(id: string) :Promise<void> {
+        await this.db.pool.query(query.updateUserSells, [id])
     }
  }
 

@@ -51,6 +51,13 @@ class PaymentController {
             const { order_id } = req.params
             const order = await repository.updateOrderStatus(order_id, "accept")
 
+            const productId = order?.product_id
+            const sellerId = order?.seller_id
+
+
+            await message.sendMessage("product", { productId })
+            await message.sendMessage("user", { sellerId })
+
             res.status(200).json(order)
         } catch(e:any) {
             res.status(500).json(e.message)
@@ -62,6 +69,11 @@ class PaymentController {
             
             const { order_id } = req.params
             const order = await repository.updateOrderStatus(order_id, "canceled")
+
+            const productId = order?.product_id
+
+            await message.sendMessage("product", { productId })
+
             res.status(204).json(order)
 
         } catch(e:any) {

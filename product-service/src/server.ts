@@ -9,7 +9,7 @@ import MessageQueue from "./utils/message-broker"
 
 const app = express()
 const message = new MessageQueue()
-message.handlePaymentRequest("product")
+message.handleIncomingMessages("product")
 
 app.use(express.json())
 

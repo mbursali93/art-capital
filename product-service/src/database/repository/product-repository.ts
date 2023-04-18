@@ -41,9 +41,9 @@ class ProductRepository {
     }
 
 
-    async updateProductStatus(id:string) {
+    async updateProductStatus(id:string, status:string) {
         await Product.findOneAndUpdate({ _id: id }, {
-            status: "pending"
+            status: status
         })
     }
 }
