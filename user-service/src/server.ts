@@ -27,13 +27,13 @@ app.use("/admin", adminRouter)
 
 
 database.connect()
-
+message.handleIncomingMessages("user")
 
 const PORT = process.env.USER_SERVICE_PORT || 7001
 
 
 
-app.listen(7001, ()=> console.log(`user-service is running on PORT: ${PORT}`))
+app.listen(0, ()=> console.log(`user-service is running on PORT: ${PORT}`))
 
 
 export default app;

@@ -35,7 +35,7 @@ class UserController {
 
             res.cookie("refreshToken", refreshToken, { httpOnly: true, path: "/", maxAge: 1000 * 3600 * 7 * 24 })
 
-            const { password, ...others } = user;
+            const { password, iban, ...others } = user;
             res.status(200).json({...others, accessToken})
 
         } catch(e:any) {

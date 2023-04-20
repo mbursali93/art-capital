@@ -3,6 +3,8 @@ import server from "../server"
 import chaiHttp from "chai-http";
 import { correctUser } from "./fixtures";
 
+should()
+
 class UserTests {
    
     

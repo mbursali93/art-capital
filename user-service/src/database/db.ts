@@ -17,12 +17,7 @@ class Database {
         
         });
     }
-
-        
-
-  
-    
-    
+      
     private createTable():void {
         
         const tablePath = path.join(__dirname, 'models/user-table.sql')
