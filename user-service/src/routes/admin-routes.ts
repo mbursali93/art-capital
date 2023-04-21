@@ -1,5 +1,5 @@
 import { Router } from "express"
-import AdminController from "../controller/admin-controller"
+import AdminController from "../controllers/admin-controller"
 import { verifyAdmin } from "../middlewares/verifyAdmin"
 
 const constroller = new AdminController()

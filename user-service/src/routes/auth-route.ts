@@ -1,9 +1,9 @@
 import { Router } from "express"
-import UserController from "../controller/user-controller";
+import AuthController from "../controllers/auth-controller";
 import userValidation from "../middlewares/validators";
 
 const router = Router()
-const controller = new UserController()
+const controller = new AuthController()
 
 
 router.post("/register", userValidation, controller.register)

@@ -7,7 +7,9 @@ class UserService {
 
     utils: AuthUtils
     repository: UserRepository
+
     constructor() {
+
         this.utils = new AuthUtils()
         this.repository = new UserRepository()
     }
@@ -33,8 +35,17 @@ class UserService {
 
     }
 
-    async getUser(id: string) {
-        
+    async getUserById(id: string) {
+        return await this.repository.getUserById(id)
+    }
+
+    async changePassword(id: string, password: string) {
+        const hashedPassword = await this.utils.generateHashedPassword(password)
+        return await this.repository.changePassword(id, hashedPassword)
+    }
+
+    async updateSocialMediaLinks(id: string, links: string) {
+        return await this.repository.updateSocialMediaLinks(id, links)
     }
 }
 

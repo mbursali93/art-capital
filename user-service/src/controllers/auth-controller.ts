@@ -6,7 +6,7 @@ import AuthUtils from "../utils/auth-utils";
 const service = new UserService()
 const utils = new AuthUtils()
 
-class UserController {
+class AuthController {
 
     async register(req: Request, res: Response) {
         try {
@@ -66,19 +66,11 @@ class UserController {
         }
     }
 
-    async getUserById (req: Request, res: Response) {
-        try {
-
-            res.status(200).json()
-        } catch(e:any) {
-            res.status(500).json(e.message)
-        }
-    }
 
 }
 
 
     
 
-export default UserController
+export default AuthController
 
